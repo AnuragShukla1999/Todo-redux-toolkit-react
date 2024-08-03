@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const todoSlice = createSlice({
   name: 'todos',
   initialState: {
-    items: [],
+    items:  localStorage.getItem('todo') ? JSON.parse(localStorage.getItem('todo')) : [],
   },
   reducers: {
     addTodo: (state, action) => {
@@ -12,15 +12,21 @@ const todoSlice = createSlice({
         text: action.payload,
         completed: false,
       });
+
+      localStorage.setItem('todo', JSON.stringify(state.items))
     },
     toggleTodo: (state, action) => {
       const todo = state.items.find(todo => todo.id === action.payload);
       if (todo) {
         todo.completed = !todo.completed;
       }
+
+      localStorage.setItem('todo', JSON.stringify(state.items))
     },
     deleteTodo: (state, action) => {
       state.items = state.items.filter(todo => todo.id !== action.payload);
+
+      localStorage.setItem('todo', JSON.stringify(state.items))
     },
   },
 });
